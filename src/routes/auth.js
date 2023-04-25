@@ -20,7 +20,7 @@ router.get('/microsoft/callback',
     
     const email = req.user.emails[0].value;
   
-    const user = await User.findOne({"basic_info.email": email});
+    const user = await User.findOne({email});
 
     if(!user) {
       const new_user = new User({
