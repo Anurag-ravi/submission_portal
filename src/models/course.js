@@ -4,6 +4,7 @@ const Course_Schema = mongoose.Schema(
   {
     name: { type: String, required: true },
     code: { type: String, required: true, unique: true },
+    description: { type: String },
     enrolment_key: { type: String, required: true, unique: true },
     faculties: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
     students: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
