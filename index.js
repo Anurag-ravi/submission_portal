@@ -66,6 +66,7 @@ const StartServer = () => {
 
     /** Routes */
     router.use('/auth', require('./src/routes/auth')); // tested
+    router.use('/admin', require('./src/routes/admin')); // tested
 
     /** Healthcheck */
     router.get('/', (req, res) => {

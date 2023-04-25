@@ -6,7 +6,7 @@ const generateToken = (user) => {
     const payload = {
         email: user.email
     };
-    return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '1h' });
+    return jwt.sign(payload, config.JWT_SECRET, { expiresIn: '10d' });
 };
 
 const verifyToken = async (token) => {
