@@ -13,9 +13,12 @@ const Submission_Schema = mongoose.Schema(
       required: true,
     },
     file: {
-      mimetype: { type: String, required: true },
-      path: { type: String, required: true },
-      filename: { type: String, required: true },
+      type: {
+        mimetype: { type: String, required: true },
+        path: { type: String, required: true },
+        filename: { type: String, required: true },
+      },
+      required: false,
     },
     time: { type: Date, default: Date.now },
     comment: { type: String },

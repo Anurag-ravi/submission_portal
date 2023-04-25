@@ -60,6 +60,8 @@ const StartServer = () => {
     router.use('/faculty', require('./src/routes/faculty')); // tested
     router.use('/assignment', require('./src/routes/assignment')); // tested
     router.use('/student', require('./src/routes/student')); // 
+    router.use('/submission', require('./src/routes/submission')); // 
+    router.use('/feedback', require('./src/routes/feedback')); //
     /** Healthcheck */
     router.get('/', (req, res) => {
         console.log(req.user);
