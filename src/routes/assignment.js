@@ -32,5 +32,6 @@ router.get('/:courseId', assignmentRoutes.getAllAssignments);
 router.post('/:courseId', assignmentRoutes.createAssignment);
 router.post('/add/:assignment_id', upload.single('file'), assignmentRoutes.addFile);
 router.get('/file/:assignment_id', assignmentRoutes.getAssignmentFile);
+router.patch('/:assignment_id', assignmentRoutes.updateAssignment);
 
 module.exports = router;

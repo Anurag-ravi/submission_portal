@@ -1,4 +1,3 @@
-const User = require('../models/user');
 const Assignment = require('../models/assignment');
 const Course = require('../models/course');
 const path = require('path');
@@ -51,13 +50,30 @@ const getAssignmentFile = async (req, res) => {
     }
     const dir = path.join(__dirname, '../../',file.path, file.filename);
     const data = fs.readFileSync(dir);
+    res.setHeader('Content-disposition', `attachment; filename=${file.filename}`);
     res.contentType(file.mimetype);
     res.send(data);
+}
+
+const updateAssignment = async (req, res) => {
+    const { assignment_id } = req.params;
+    const assignment = await Assignment.findById(assignment_id);
+    if (!assignment) {
+        return res.status(404).json({ message: "Assignment not found" });
+    }
+    const { name, description, due_date, total_marks } = req.body;
+    assignment.name = name || assignment.name;
+    assignment.description = description || assignment.description;
+    assignment.due_date = due_date || assignment.due_date;
+    assignment.total_marks = total_marks || assignment.total_marks;
+    await assignment.save();
+    res.status(200).json({ assignment });
 }
 
 module.exports = {
     getAllAssignments,
     createAssignment,
     addFile,
-    getAssignmentFile
+    getAssignmentFile,
+    updateAssignment
 }
