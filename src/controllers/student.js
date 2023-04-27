@@ -1,7 +1,8 @@
 const Course = require('../models/course');
+const User = require('../models/user');
 
 const getProfile = async (req, res) => {
-    const user = req.user;
+    const user = await User.findById(req.user._id).populate('courses_enrolled').populate('courses_tutoring');
     res.status(200).json({ user });
 }
 

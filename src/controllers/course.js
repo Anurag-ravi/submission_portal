@@ -48,7 +48,7 @@ const createCourse = async (req, res) => {
 
 const getCourse = async (req, res) => {
     const { courseId } = req.params;
-    const course = await Course.findById(courseId);
+    const course = await Course.findById(courseId).populate('faculties').populate('students').populate('assignments');
     if (!course) {
         return res.status(404).json({ message: 'Course not found' });
     }

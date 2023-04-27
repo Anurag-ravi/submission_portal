@@ -38,7 +38,7 @@ router.get('/microsoft/callback',
       //generate token
       const token = user_token.generateToken(user);
       debug(`Generated token: ${token}`);
-      res.redirect(`${config.FRONTEND_URL}/?token=${token}`);
+      res.redirect(`${config.FRONTEND_URL}/callback/?token=${token}`);
     }
   }
 );
