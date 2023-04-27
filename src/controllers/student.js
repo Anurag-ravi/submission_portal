@@ -2,25 +2,38 @@ const Course = require('../models/course');
 const User = require('../models/user');
 
 const getProfile = async (req, res) => {
-    const user = await User.findById(req.user._id).populate('courses_enrolled').populate('courses_tutoring');
+    const user = await User.findById(req.user._id)
+    .populate({
+        path : 'courses_enrolled',
+        populate : {
+            path : 'faculties'
+        }
+    })
+    .populate({
+        path : 'courses_tutoring',
+        populate : {
+            path : 'faculties'
+        }
+    });
     res.status(200).json({ user });
 }
 
 const joinCourse = async (req, res) => {
     const { courseId, enrollmentKey } = req.body;
     const user = req.user;
-    const course = await Course.findById(courseId);
+    const course = await Course.findOne({ code : courseId });
     if (!course) {
         return res.status(404).json({ message: "Course not found" });
     }
-    if (course.enrollment_key !== enrollmentKey) {
+    if (course.enrolment_key !== enrollmentKey) {
         return res.status(400).json({ message: "Invalid enrollment key" });
     }
-    user.courses_enrolled.push(courseId);
+    user.courses_enrolled.push(course._id);
     await user.save();
     course.students.push(user._id);
     await course.save();
-    res.status(200).json({ message: "Course joined" });
+    const ncourse = await Course.findById(course._id).populate('faculties');
+    res.status(200).json({ message: "Course joined", course: ncourse });
 }
 
 const getEnrolledCourses = async (req, res) => {
