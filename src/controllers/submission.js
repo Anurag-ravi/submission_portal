@@ -100,7 +100,7 @@ const getDetailedSubmission = async (req, res) => {
     })
     .populate({
         path: 'assignment',
-        select: 'name'
+        select: 'name total_marks'
     });
     if (!submission) {
         return res.status(404).json({ message: "Submission not found" });

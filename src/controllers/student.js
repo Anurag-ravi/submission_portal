@@ -62,10 +62,26 @@ const unenrollCourse = async (req, res) => {
     res.status(200).json({ message: "Course unenrolled" });
 }
 
+const getUser = async (req, res) => {
+    const { email,courseId } = req.body;
+    const user = await User.findOne({ email }).select('name email roll');
+    const course = await Course.findById(courseId);
+    if (!course || !user) {
+        return res.status(404).json({ message: "Course or User not found" });
+    }
+    // check if user is faculty of course
+    if (course.faculties.includes(user._id)) {
+        return res.status(200).json({ user, isTA: true });
+    }
+    res.status(200).json({ user, isTA: false });
+}
+
+
 module.exports = {
     getProfile,
     joinCourse,
     getEnrolledCourses,
     getTutoringCourses,
-    unenrollCourse
+    unenrollCourse,
+    getUser
 }

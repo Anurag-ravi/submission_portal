@@ -8,5 +8,6 @@ router.post('/join', userMiddleware, studentController.joinCourse);
 router.get('/enrolled', userMiddleware, studentController.getEnrolledCourses);
 router.get('/tutoring', userMiddleware, studentController.getTutoringCourses);
 router.delete('/unenroll/:courseId', userMiddleware, studentController.unenrollCourse);
+router.post('/get', userMiddleware, studentController.getUser);
 
 module.exports = router;
