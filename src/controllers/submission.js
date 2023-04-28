@@ -19,7 +19,7 @@ const createSubmission = async (req, res) => {
     assignment.submissions.push(submission._id);
     await assignment.save();
     // create a folder for the submission
-    const dir = path.join(__dirname, '../../', 'files', assignment.course.toString(), assignment_id, submission._id);
+    const dir = path.join(__dirname, '../../', 'files', assignment.course.toString(), assignment_id, submission._id.toString());
     if (!fs.existsSync(dir)) {
         fs.mkdirSync(dir, { recursive: true });
     }
@@ -27,12 +27,15 @@ const createSubmission = async (req, res) => {
 }
 
 const submitFile = async (req, res) => {
+    if(!req.submitted){
+        return res.status(404).json({ message: "Submission not found" });
+    }
     res.json({ message: "File submitted" });
 }   
 
 const getSubmissionFile = async (req, res) => {
-    const { assignment_id,student_id } = req.body;
-    const submission = await Submission.findOne({ assignment: assignment_id, student: student_id });
+    const { submission_id } = req.params;
+    const submission = await Submission.findById(submission_id);
     if (!submission) {
         return res.status(404).json({ message: "Submission not found" });
     }
@@ -47,8 +50,24 @@ const getSubmissionFile = async (req, res) => {
     res.send(data);
 }
 
+const checkSubmission = async (req, res) => {
+    const { assignment_id } = req.params;
+    const submission = await Submission.findOne({ assignment: assignment_id, student: req.user._id })
+    .populate({
+        path: 'feedback',
+        populate: {
+            path: 'faculty',
+            select: 'name'
+        }
+    });
+    if (!submission) {
+        return res.status(404).json({ message: "Submission not found" });
+    }
+    res.status(200).json({ submission });
+}
 module.exports = {
     createSubmission,
     submitFile,
-    getSubmissionFile
+    getSubmissionFile,
+    checkSubmission
 }
