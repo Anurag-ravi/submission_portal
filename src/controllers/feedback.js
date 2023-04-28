@@ -17,7 +17,8 @@ const createFeedback = async (req, res) => {
     await feedback.save();
     submission.feedback = feedback._id;
     await submission.save();
-    res.status(200).json({ feedback });
+    const nf = await Feedback.findById(feedback._id).populate('faculty');
+    res.status(200).json({ feedback:nf });
 }
 
 const getFeedback = async (req, res) => {

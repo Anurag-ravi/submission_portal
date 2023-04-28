@@ -37,6 +37,8 @@ router.post('/:assignment_id', userMiddleware ,submissionController.createSubmis
 router.post('/add/:submission_id',userMiddleware , upload.single('file'), submissionController.submitFile);
 router.get('/file/:submission_id', submissionController.getSubmissionFile);
 router.get('/check/:assignment_id',userMiddleware , submissionController.checkSubmission);
+router.get('/all/:assignment_id',userMiddleware , submissionController.getAllSubmission);
+router.get('/details/:submission_id',userMiddleware , submissionController.getDetailedSubmission);
 
 module.exports = router;
             

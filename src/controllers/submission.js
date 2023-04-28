@@ -65,9 +65,55 @@ const checkSubmission = async (req, res) => {
     }
     res.status(200).json({ submission });
 }
+
+const getAllSubmission = async (req, res) => {
+    const { assignment_id } = req.params;
+    const assignment = await Assignment.findById(assignment_id)
+    .populate({
+        path: 'course',
+        select: 'name code'
+    })
+    .select('name course')
+    ;
+    if (!assignment) {
+        return res.status(404).json({ message: "Assignment not found" });
+    }
+    const submission = await Submission.find({ assignment: assignment_id })
+    .populate('student')
+    .populate('feedback');
+    res.status(200).json({ submission,assignment });
+}
+
+const getDetailedSubmission = async (req, res) => {
+    const { submission_id } = req.params;
+    const submission = await Submission.findById(submission_id)
+    .populate({
+        path: 'student',
+        select: 'name email roll'
+    })
+    .populate({
+        path: 'feedback',
+        populate: {
+            path: 'faculty',
+            select: 'name email'
+        }
+    })
+    .populate({
+        path: 'assignment',
+        select: 'name'
+    });
+    if (!submission) {
+        return res.status(404).json({ message: "Submission not found" });
+    }
+    res.status(200).json({ submission });
+}
+
+
 module.exports = {
     createSubmission,
     submitFile,
     getSubmissionFile,
-    checkSubmission
+    checkSubmission,
+    getAllSubmission,
+    getDetailedSubmission
 }

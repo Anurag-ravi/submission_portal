@@ -14,7 +14,7 @@ const Feedback_Schema = mongoose.Schema(
     },
     comment: { type: String },
     time: { type: Date, default: Date.now },
-    marks: { type: Number, required: true },
+    marks: { type: String, required: true },
   },
   { versionKey: false }
 );
