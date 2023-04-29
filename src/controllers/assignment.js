@@ -49,26 +49,26 @@ const createAssignment = async (req, res) => {
       fs.mkdirSync(dir, { recursive: true });
     }
 
-    // // notifications part
-    // notifyStudent(assignment._id);
-    // // cron job to remind TA when the due date time is reached
-    // const date = new Date(due_date);
-    // const cronString = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${
-    //   date.getMonth() + 1
-    // } *`;
-    // cron.schedule(cronString, () => {
-    //   notifyTA(assignment._id);
-    // });
-    // // cron job to remind Students 24 hours before the due date time
-    // const date2 = new Date(due_date);
-    // date2.setHours(date2.getHours() - 24);
-    // const cronString2 = `${date2.getMinutes()} ${date2.getHours()} ${date2.getDate()} ${
-    //   date2.getMonth() + 1
-    // } *`;
-    // cron.schedule(cronString2, () => {
-    //   remindStudent(assignment._id);
-    // });
-    // // end of notifications part
+    // notifications part
+    notifyStudent(assignment._id);
+    // cron job to remind TA when the due date time is reached
+    const date = new Date(due_date);
+    const cronString = `${date.getMinutes()} ${date.getHours()} ${date.getDate()} ${
+      date.getMonth() + 1
+    } *`;
+    cron.schedule(cronString, () => {
+      notifyTA(assignment._id);
+    });
+    // cron job to remind Students 24 hours before the due date time
+    const date2 = new Date(due_date);
+    date2.setHours(date2.getHours() - 24);
+    const cronString2 = `${date2.getMinutes()} ${date2.getHours()} ${date2.getDate()} ${
+      date2.getMonth() + 1
+    } *`;
+    cron.schedule(cronString2, () => {
+      remindStudent(assignment._id);
+    });
+    // end of notifications part
 
     res.status(200).json({ assignment });
   } catch (err) {
