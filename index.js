@@ -69,21 +69,21 @@ const StartServer = () => {
     });
 
     /** Cron Jobs to delete orders every day at 6am */
-    // cron.schedule(
-    //     '0 6 * * *',
-    //     async () => {
-    //         const orders = await Order.find({ type: 'Print', status: { $in: ['Rejected', 'Cancelled', 'Delivered'] } });
-    //         for (let i = 0; i < orders.length; i++) {
-    //             const order = orders[i];
-    //             deleteOrderFolder(order);
-    //         }
-    //         Logging.debug('Cron Job ran successfully');
-    //     },
-    //     {
-    //         scheduled: true,
-    //         timezone: 'Asia/Kolkata'
-    //     }
-    // );
+    cron.schedule(
+        '0 6 * * *',
+        async () => {
+            const orders = await Order.find({ type: 'Print', status: { $in: ['Rejected', 'Cancelled', 'Delivered'] } });
+            for (let i = 0; i < orders.length; i++) {
+                const order = orders[i];
+                deleteOrderFolder(order);
+            }
+            Logging.debug('Cron Job ran successfully');
+        },
+        {
+            scheduled: true,
+            timezone: 'Asia/Kolkata'
+        }
+    );
 
     const httpServer = http.createServer(router);
     httpServer.listen(config.PORT, () => {
