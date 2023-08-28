@@ -37,7 +37,7 @@ const StartServer = () => {
 
         next();
     });
-
+    /** The code configures an Express.js server with middleware for request data parsing (URL-encoded, JSON), CORS support, and session management.*/
     // router.use(express.urlencoded({ extended: true }));
     router.use(express.urlencoded({ extended: false }));
     router.use(express.json());
